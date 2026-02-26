@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -e
+
+if [[ $# -lt 2 ]]
+then
+    echo "fatal: too few arguments"
+    exit 1
+fi
+
+od -An -tx4 -v $1 >$2

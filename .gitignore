@@ -1,0 +1,11 @@
+/tb/obj_dir
+/tb/*.mem
+/board/altera/5cseba6u23l7/simulation/
+/board/altera/5cseba6u23l7/db/
+/board/altera/5cseba6u23l7/incremental_db/
+/board/altera/5cseba6u23l7/output_files/
+*.vcd
+*.o
+*.d
+*.bin
+*.stp
