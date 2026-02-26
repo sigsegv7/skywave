@@ -12,15 +12,29 @@ module pe #(
 ) (
     input wire clk_i,
     input wire reset_i,
-
-    /* verilator lint_off UNUSEDSIGNAL */
     input wire [BUS_WIDTH-1:0] bus_data_i,
 
     output logic [AD_LEN-1:0] bus_ad_o
 );
-    always @(posedge clk_i) begin
+    /* verilator lint_off UNUSEDSIGNAL */
+    logic [31:0] inst_feed;
+    logic inst_ready_feed;
+    logic inst_consume_feed;
+
+    fetch #(.BUS_WIDTH(BUS_WIDTH), .AD_LEN(AD_LEN)) fetch_unit(
+        .clk_i(clk_i),
+        .reset_i(reset_i),
+        .bus_data_i(bus_data_i),
+        .inst_consume_i(inst_consume_feed),
+        .bus_ad_o(bus_ad_o),
+        .inst_o(inst_feed),
+        .inst_ready_o(inst_ready_feed)
+    );
+
+    always_ff @(posedge clk_i) begin
         if (reset_i) begin
             bus_ad_o <= 0;
+            inst_consume_feed <= 0;
         end
     end
 endmodule
