@@ -27,7 +27,7 @@ module rom #(
     // Handle preload, reset and read
     always_ff @(posedge clk_i) begin
         if (reset_i) begin
-            $readmemh("fw.mem", rom);
+            $readmemh("stage1.mem", rom);
         end else if (ad_i < ROM_MAX_ADDR) begin
             data_o <= rom[ad_i>>2];
         end

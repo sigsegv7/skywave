@@ -8,7 +8,12 @@ TB_FILES =				\
 	test_core.cpp
 
 .PHONY: all
-all: obj vcd
+all: rom obj vcd
+
+.PHONY: rom
+rom:
+	rsync -avr ../firmware/*.mem .
+	rsync -avr ../firmware/*.mem ../board/altera/5cseba6u23l7/
 
 .PHONY: obj
 obj:

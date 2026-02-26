@@ -1,5 +1,6 @@
 /tb/obj_dir
 /tb/*.mem
+/board/altera/5cseba6u23l7/*.mem
 /board/altera/5cseba6u23l7/simulation/
 /board/altera/5cseba6u23l7/db/
 /board/altera/5cseba6u23l7/incremental_db/
