@@ -21,7 +21,7 @@ module pe #(
     logic inst_ready_feed;
     logic inst_consume_feed;
 
-    fetch #(.BUS_WIDTH(BUS_WIDTH), .AD_LEN(AD_LEN)) fetch_unit(
+    fetch #(.BUS_WIDTH(BUS_WIDTH), .AD_LEN(AD_LEN)) fetch_unit (
         .clk_i(clk_i),
         .reset_i(reset_i),
         .bus_data_i(bus_data_i),
@@ -29,6 +29,14 @@ module pe #(
         .bus_ad_o(bus_ad_o),
         .inst_o(inst_feed),
         .inst_ready_o(inst_ready_feed)
+    );
+
+    ctl ctl_unit (
+        .clk_i(clk_i),
+        .reset_i(reset_i),
+        .inst_i(inst_feed),
+        .inst_ready_i(inst_ready_feed),
+        .inst_consume_o(inst_consume_feed)
     );
 
     always_ff @(posedge clk_i) begin
