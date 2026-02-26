@@ -8,8 +8,14 @@ module skywave (
     input wire clk_i,
     input wire reset_i
 );
+    /* verilator lint_off UNUSEDSIGNAL */
     logic reset;
     logic clk;
+
+    //
+    // Reset bridge - not required with simulations
+    //
+`ifndef SKYWAVE_SIM
     logic pll_locked;
 
     pll soc_pll (
@@ -26,4 +32,10 @@ module skywave (
     always @(posedge clk) begin
         reset <= ~reset_i | ~pll_locked;
     end
+`else
+    assign clk = clk_i;
+    always @(posedge clk) begin
+        reset <= ~reset_i;
+    end
+`endif  /* !SKYWAVE_SIM */
 endmodule
