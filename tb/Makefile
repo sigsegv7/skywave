@@ -1,5 +1,8 @@
 SV_FILES =				 	\
 	../rtl/skywave.sv		\
+	../rtl/cpu/pe.sv		\
+	../rtl/uncore/rom.sv	\
+	../rtl/uncore/busctl.sv
 
 TB_FILES =				\
 	test_core.cpp
