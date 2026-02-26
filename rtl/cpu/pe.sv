@@ -38,11 +38,4 @@ module pe #(
         .inst_ready_i(inst_ready_feed),
         .inst_consume_o(inst_consume_feed)
     );
-
-    always_ff @(posedge clk_i) begin
-        if (reset_i) begin
-            bus_ad_o <= 0;
-            inst_consume_feed <= 0;
-        end
-    end
 endmodule

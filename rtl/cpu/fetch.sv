@@ -35,6 +35,7 @@ module fetch #(
             pc <= 0;
             inst <= 0;
             stage <= 0;
+            bus_ad_o <= 0;
         end else begin
             case (stage)
             STAGE_REQ: begin
