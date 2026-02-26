@@ -53,9 +53,11 @@ module fetch #(
             end
             STAGE_OUTPUT: begin
                 inst_ready_o <= 1;
-                inst_o <= inst;
-                stage <= 0;
-                pc <= pc + 4;
+                if (!inst_consume_i) begin
+                    inst_o <= inst;
+                    stage <= 0;
+                    pc <= pc + 4;
+                end
             end
             endcase
         end

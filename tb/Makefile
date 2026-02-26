@@ -23,7 +23,7 @@ obj:
 		-DSKYWAVE_SIM		 \
 		--trace 			 \
 		-cc 				 \
-		-I../hdl/inc		 \
+		-I../rtl/inc		 \
 		$(SV_FILES) 		 \
 		--exe $(TB_FILES) 	 \
 		--top-module skywave
