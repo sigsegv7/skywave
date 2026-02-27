@@ -39,7 +39,7 @@ module pe #(
         .reg_id_o(reg_id_feed)
     );
 
-    fetch fetch_unit (
+    fetch #(.AD_LEN(AD_LEN), .BUS_WIDTH(BUS_WIDTH)) fetch_unit (
         .clk_i(clk_i),
         .reset_i(reset_i),
         .pc_i(pc_feed),
