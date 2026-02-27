@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <unistd.h>
+#include "basm/state.h"
 
 /* BASM version */
 #define BASM_VERSION "0.0.1"
@@ -27,6 +28,21 @@ version(void)
     );
 }
 
+static int
+assemble(const char *in_path)
+{
+    struct basm_state state;
+
+    if (basm_state_init(&state, in_path) < 0) {
+        printf("fatal: failed to initialize state\n");
+        perror("basm_state_init");
+        return -1;
+    }
+
+    basm_state_destroy(&state);
+    return 0;
+}
+
 int
 main(int argc, char **argv)
 {
@@ -39,6 +55,12 @@ main(int argc, char **argv)
             return -1;
         case 'v':
             version();
+            return -1;
+        }
+    }
+
+    while (optind < argc) {
+        if (assemble(argv[optind++]) < 0) {
             return -1;
         }
     }
