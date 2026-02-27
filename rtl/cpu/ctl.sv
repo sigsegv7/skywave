@@ -7,6 +7,17 @@
 //
 // @clk_i:          Clock input
 // @reset_i:        Reset input
+// @inst_valid_i:   If high, a valid instruction is ready
+// @inst_i:         Fetch unit instruction input
+// @reg_value_i:    Input register value input
+// @alu_op_res_i:   ALU operation result input
+// @pc_o:           Program counter output to fetch unit
+// @reg_write_en_o: If high, target register is written to
+// @reg_value_o:    Value to write to register
+// @reg_id_o:       Target register output
+// @alu_op_a_o:     ALU operand A output
+// @alu_op_b_o:     ALU operand B output
+// @alu_opc_o:      ALU operation code output
 //
 module ctl #(
     parameter WORD_LEN = 64
@@ -15,8 +26,6 @@ module ctl #(
     input wire reset_i,
     input wire inst_valid_i,
     input wire [31:0] inst_i,
-
-    /* verilator lint_off UNUSEDSIGNAL */
     input wire [WORD_LEN-1:0] reg_value_i,
     input wire [WORD_LEN-1:0] alu_op_res_i,
 
