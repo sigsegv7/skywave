@@ -1,3 +1,14 @@
+/*
+ * On-core fetch unit
+ *
+ * @clk_i:       Input clock
+ * @reset_i:     Reset input
+ * @pc_i:        Program counter input
+ * @bus_data_i:  Bus data input
+ * @bus_ad_o'    Bus address output
+ * @inst_valid_o: Bus valid signal output
+ * @inst_o:      Intruction result output
+ */
 module fetch #(
     parameter AD_LEN = 32,
     parameter BUS_WIDTH = 32,
