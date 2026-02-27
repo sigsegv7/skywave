@@ -16,7 +16,6 @@ module pe #(
 
     output logic [AD_LEN-1:0] bus_ad_o
 );
-    /* verilator lint_off UNUSEDSIGNAL */
     logic [31:0] inst_feed;
     logic inst_ready_feed;
     logic inst_consume_feed;

@@ -31,10 +31,9 @@ module ctl (
             inst_consume_o <= 1;
         end else if (!pc_inhibit && inst_ready_i && !substage) begin
             substage <= ~substage;
-            inst_consume_o <= 0;
             inst <= inst_i;
         end else if (!pc_inhibit && inst_ready_i && substage) begin
-            inst_consume_o <= 1;
+            inst_consume_o <= 0;
             substage <= 0;
             case (inst[7:0])
                 OPCODE_NOP:  ;

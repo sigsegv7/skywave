@@ -35,12 +35,14 @@ module fetch #(
             pc <= 0;
             inst <= 0;
             stage <= 0;
+            inst_ready_o <= 0;
+            inst_o <= 0;
             bus_ad_o <= 0;
         end else begin
             case (stage)
             STAGE_REQ: begin
+                inst_ready_o <= 0;
                 if (inst_consume_i) begin
-                    inst_ready_o <= 0;
                     bus_ad_o <= pc;
                     stage <= stage + 1;
                 end
