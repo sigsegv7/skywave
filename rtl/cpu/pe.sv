@@ -12,8 +12,6 @@ module pe #(
 ) (
     input wire clk_i,
     input wire reset_i,
-
-    /* verilator lint_off UNUSEDSIGNAL */
     input wire [BUS_WIDTH-1:0] bus_data_i,
 
     output logic [AD_LEN-1:0] bus_ad_o
