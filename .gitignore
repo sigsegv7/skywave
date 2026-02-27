@@ -5,6 +5,7 @@
 /board/altera/5cseba6u23l7/db/
 /board/altera/5cseba6u23l7/incremental_db/
 /board/altera/5cseba6u23l7/output_files/
+/basm/basm
 *.vcd
 *.o
 *.d
