@@ -18,12 +18,25 @@ module pe #(
 
     output logic [AD_LEN-1:0] bus_ad_o
 );
+    logic inst_valid_feed;
+    logic [31:0] pc_feed;
+    logic [31:0] inst_feed;
+
     ctl ctl_unit (
         .clk_i(clk_i),
-        .reset_i(reset_i)
+        .reset_i(reset_i),
+        .inst_i(inst_feed),
+        .inst_valid_i(inst_valid_feed),
+        .pc_o(pc_feed)
     );
 
-    always_ff @(posedge clk_i) begin
-        bus_ad_o <= 0;
-    end
+    fetch fetch_unit (
+        .clk_i(clk_i),
+        .reset_i(reset_i),
+        .pc_i(pc_feed),
+        .bus_data_i(bus_data_i),
+        .bus_ad_o(bus_ad_o),
+        .inst_valid_o(inst_valid_feed),
+        .inst_o(inst_feed)
+    );
 endmodule

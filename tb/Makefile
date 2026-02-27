@@ -2,6 +2,7 @@ SV_FILES =				 	\
 	../rtl/skywave.sv		\
 	../rtl/cpu/pe.sv		\
 	../rtl/cpu/ctl.sv		\
+	../rtl/cpu/fetch.sv		\
 	../rtl/uncore/rom.sv	\
 	../rtl/uncore/busctl.sv
 
