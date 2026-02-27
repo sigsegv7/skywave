@@ -1,5 +1,6 @@
 `include "inst.svh"
 `include "regs.svh"
+`include "alu.svh"
 
 //
 // On-core control unit
@@ -17,17 +18,23 @@ module ctl #(
 
     /* verilator lint_off UNUSEDSIGNAL */
     input wire [WORD_LEN-1:0] reg_value_i,
+    input wire [WORD_LEN-1:0] alu_op_res_i,
 
     output logic [31:0] pc_o,
     output logic reg_write_en_o,
     output logic [WORD_LEN-1:0] reg_value_o,
-    output reg_t reg_id_o
+    output reg_t reg_id_o,
+
+    output logic [WORD_LEN-1:0] alu_op_a_o,
+    output logic [WORD_LEN-1:0] alu_op_b_o,
+    output alu_op_t alu_opc_o
 );
     /* verilator lint_off WIDTHEXPAND */
     logic [31:0] pc;
     logic [31:0] inst;
     logic need_decode;
     logic pc_inhibit;
+    logic substage;
 
     assign pc_o = pc;
 
@@ -39,20 +46,39 @@ module ctl #(
             reg_write_en_o <= 0;
             reg_value_o <= 0;
             reg_id_o <= reg_t'(0);
+            substage <= 0;
         end else if (inst_valid_i && !need_decode && !pc_inhibit) begin
             reg_write_en_o <= 0;
             need_decode <= 1;
             inst <= inst_i;
             pc <= pc + 4;
         end else if (need_decode) begin
-            need_decode <= 0;
             case (inst[7:0])
                 OPCODE_NOP: ;
-                OPCODE_HLT: pc_inhibit <= 1;
+                OPCODE_HLT: begin
+                    pc_inhibit <= 1;
+                    need_decode <= 0;
+                end
                 OPCODE_IMOV: begin
                     reg_id_o <= reg_t'(inst[15:8]);
                     reg_value_o <= inst[31:16];
                     reg_write_en_o <= 1;
+                    need_decode <= 0;
+                end
+                OPCODE_IADD: begin
+                    reg_id_o <= reg_t'(inst[15:8]);
+                    alu_opc_o <= ALU_OP_ADD;
+
+                    if (!substage) begin
+                        substage <= ~substage;
+                        alu_op_a_o <= reg_value_i;
+                        alu_op_b_o <= inst[31:16];
+                    end else begin
+                        substage <= ~substage;
+                        reg_value_o <= alu_op_res_i;
+                        reg_write_en_o <= 1;
+                        need_decode <= 0;
+                    end
                 end
                 default: ;
             endcase

@@ -1,4 +1,5 @@
 `include "regs.svh"
+`include "alu.svh"
 
 //
 // Processing element
@@ -26,6 +27,10 @@ module pe #(
     logic [WORD_LEN-1:0] reg_value_pool;
     logic reg_write_en_feed;
     reg_t reg_id_feed;
+    logic [WORD_LEN-1:0] alu_op_a_feed;
+    logic [WORD_LEN-1:0] alu_op_b_feed;
+    logic [WORD_LEN-1:0] alu_op_res_pool;
+    alu_op_t alu_opc_feed;
 
     ctl #(.WORD_LEN(WORD_LEN)) ctl_unit (
         .clk_i(clk_i),
@@ -33,10 +38,14 @@ module pe #(
         .inst_i(inst_feed),
         .inst_valid_i(inst_valid_feed),
         .reg_value_i(reg_value_pool),
+        .alu_op_res_i(alu_op_res_pool),
         .pc_o(pc_feed),
         .reg_write_en_o(reg_write_en_feed),
         .reg_value_o(reg_value_feed),
-        .reg_id_o(reg_id_feed)
+        .reg_id_o(reg_id_feed),
+        .alu_op_a_o(alu_op_a_feed),
+        .alu_op_b_o(alu_op_b_feed),
+        .alu_opc_o(alu_opc_feed)
     );
 
     fetch #(.AD_LEN(AD_LEN), .BUS_WIDTH(BUS_WIDTH)) fetch_unit (
@@ -56,5 +65,12 @@ module pe #(
         .reg_id_i(reg_id_feed),
         .value_i(reg_value_feed),
         .value_o(reg_value_pool)
+    );
+
+    alu #(.WORD_LEN(WORD_LEN)) arith_unit (
+        .op_a_i(alu_op_a_feed),
+        .op_b_i(alu_op_b_feed),
+        .opc_i(alu_opc_feed),
+        .op_res_o(alu_op_res_pool)
     );
 endmodule
