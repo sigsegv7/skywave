@@ -235,5 +235,6 @@ HLT        0x01      Halt processor       [A]
 MOV        0x02      Move IMM to reg      [B]
 RSVD       0x03      Reserved             [N/A]
 ADD        0x04      Add IMM to reg       [B]
+SUB        0x05      Sub IMM from reg     [B]
 -------------------------------------------------------
 ```

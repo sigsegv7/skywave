@@ -97,6 +97,21 @@ module ctl #(
                         need_decode <= 0;
                     end
                 end
+                OPCODE_ISUB: begin
+                    reg_id_o <= reg_t'(inst[15:8]);
+                    alu_opc_o <= ALU_OP_SUB;
+
+                    if (!substage) begin
+                        substage <= ~substage;
+                        alu_op_a_o <= reg_value_i;
+                        alu_op_b_o <= inst[31:16];
+                    end else begin
+                        substage <= ~substage;
+                        reg_value_o <= alu_op_res_i;
+                        reg_write_en_o <= 1;
+                        need_decode <= 0;
+                    end
+                end
                 default: begin
                     // Allow the reset to propagate
                     pc_inhibit <= 1;
