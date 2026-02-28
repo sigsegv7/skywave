@@ -6,6 +6,8 @@ SV_FILES =				 	\
 	../rtl/cpu/regfile.sv	\
 	../rtl/cpu/fetch.sv		\
 	../rtl/uncore/rom.sv	\
+	../rtl/uncore/opi.sv	\
+	../rtl/uncore/puc.sv	\
 	../rtl/uncore/busctl.sv
 
 TB_FILES =				\
