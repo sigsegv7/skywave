@@ -11,3 +11,7 @@ all: $(OFILES)
 -include $(DFILES)
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
+
+.PHONY: clean
+clean:
+	rm -f $(DFILES) $(OFILES)
