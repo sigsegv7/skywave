@@ -17,8 +17,14 @@ basm_state_init(struct basm_state *state, const char *in_path)
         return -1;
     }
 
+    if (ptrbox_init(&state->ptrbox) < 0) {
+        close(in_fd);
+        return -1;
+    }
+
     if ((error = basm_readbuf_init(in_fd, &state->readbuf)) < 0) {
         close(in_fd);
+        ptrbox_destroy(&state->ptrbox);
         return -1;
     }
 
@@ -36,4 +42,5 @@ basm_state_destroy(struct basm_state *state)
 
     in_fd = readbuf_fd(&state->readbuf);
     close(in_fd);
+    ptrbox_destroy(&state->ptrbox);
 }

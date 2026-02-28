@@ -4,14 +4,17 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "basm/readbuf.h"
+#include "basm/ptrbox.h"
 
 /*
  * Assembler state machine
  *
  * @readbuf: Lexer read buffer
+ * @ptrbox: Global pointer box
  */
 struct basm_state {
     struct basm_readbuf readbuf;
+    struct ptrbox ptrbox;
 };
 
 /*
