@@ -126,6 +126,85 @@ START        END       Description
 ----------------------------------------------
 ```
 
+## Interrupt and event management
+
+Skywave is an interrupt-driven architecture, in other words, it is capable of performing a task
+and being interrupted to handle external or internal events. Events related to the current
+execution are known as *synchronous* events. Events that are external to the current execution
+are known as *asynchronous* events.
+
+An asynchronous event may indicate the need for servicing of a request by an external peripheral
+(e.g., timer, hard drive, network card, etc). A synchronous event may be the result of an error
+during execution (e.g., divide error, memory access violations, etc) or even from a special interrupt
+instruction.
+
+### Interrupt vector table (IVT)
+
+The interrupt vector table is a data structure used by the processor to identity routines (known as interrupt
+service routines) that are invoked during events.
+
+```
+BITS       NAME       PURPOSE
+------------------------------------------------------
+0          Present    Indicates if entry is used
+8:1        Zero       Must be zero
+16:9       Reserved   Reserved for future use
+80:17      ISR        Interrupt service routine base
+95:81      Zero       Must be zero
+------------------------------------------------------
+```
+
+### Interrupt table register (ITR)
+
+The interrupt service register is an internal processor register used to maintain the
+base address of the interrupt vector table. It is to be zero on start up. Any event that
+occurs while ITR refers to an invalid base address shall result in the processor branching
+to the reset vector which in turn results in the machine entering a warm reboot.
+
+### Interrupt vectors
+
+An interrupt vector is an 8-bit number used to identify a specific interrupt / event. They
+begin at zero and end at 255.
+
+
+```
+VECTOR         NAME       PURPOSE
+-------------------------------------------------------
+0x00           Sync       Synchronous events
+0x01           Async      Asynchronous events
+0x02           Reserved   Reserved, must be unused
+0x03           Reserved   Reserved, must be unused
+0x04 ... 0xFE  System     Available to system software
+0xFF           Reserved   Reserved, must be unused
+-------------------------------------------------------
+```
+
+### Error syndrome register (ESR)
+
+The error syndrome register contains a list of bits that allow for the cause
+of an error event to be evaluated.
+
+```
+BITS         NAME       PURPOSE
+-------------------------------------------------------
+7:0        Error type   Describes the kind of error
+63:8       Reserved     Reserved for future use
+-------------------------------------------------------
+```
+
+### Error syndrome type field
+
+```
+VALUE        MNEMONIC    DESCRIPTION
+-------------------------------------------------------
+0x00         Invalid     A value of zero is invalid
+0x01         MAV#        Memory access violation
+0x02         PV#         Protection violation
+0x03         UD#         Undefined opcode
+0x04         IENP#       Interrupt entry not present
+-------------------------------------------------------
+```
+
 ## Instruction encoding types
 
 ### A-type instructions
