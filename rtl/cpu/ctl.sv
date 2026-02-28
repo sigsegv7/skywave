@@ -18,6 +18,7 @@
 // @alu_op_a_o:     ALU operand A output
 // @alu_op_b_o:     ALU operand B output
 // @alu_opc_o:      ALU operation code output
+// @reset_o:        RESET line output
 //
 module ctl #(
     parameter WORD_LEN = 64
@@ -36,7 +37,8 @@ module ctl #(
 
     output logic [WORD_LEN-1:0] alu_op_a_o,
     output logic [WORD_LEN-1:0] alu_op_b_o,
-    output alu_op_t alu_opc_o
+    output alu_op_t alu_opc_o,
+    output logic reset_o
 );
     /* verilator lint_off WIDTHEXPAND */
     logic [31:0] pc;
@@ -56,6 +58,7 @@ module ctl #(
             reg_value_o <= 0;
             reg_id_o <= reg_t'(0);
             substage <= 0;
+            reset_o <= 0;
         end else if (inst_valid_i && !need_decode && !pc_inhibit) begin
             reg_write_en_o <= 0;
             need_decode <= 1;
@@ -89,7 +92,7 @@ module ctl #(
                         need_decode <= 0;
                     end
                 end
-                default: ;
+                default: reset_o <= 1;
             endcase
         end
     end

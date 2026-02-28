@@ -8,6 +8,7 @@
 // @reset_i:    Reset input
 // @bus_data_i: Bus data input
 // @bus_ad_o:   Bus address output
+// @reset_o:    RESET line output
 //
 module pe #(
     parameter AD_LEN = 32,
@@ -18,7 +19,8 @@ module pe #(
     input wire reset_i,
     input wire [BUS_WIDTH-1:0] bus_data_i,
 
-    output logic [AD_LEN-1:0] bus_ad_o
+    output logic [AD_LEN-1:0] bus_ad_o,
+    output logic reset_o
 );
     logic inst_valid_feed;
     logic [31:0] pc_feed;
@@ -45,7 +47,8 @@ module pe #(
         .reg_id_o(reg_id_feed),
         .alu_op_a_o(alu_op_a_feed),
         .alu_op_b_o(alu_op_b_feed),
-        .alu_opc_o(alu_opc_feed)
+        .alu_opc_o(alu_opc_feed),
+        .reset_o(reset_o)
     );
 
     fetch #(.AD_LEN(AD_LEN), .BUS_WIDTH(BUS_WIDTH)) fetch_unit (
