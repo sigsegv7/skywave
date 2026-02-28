@@ -8,5 +8,6 @@ OFILES = $(CFILES:.c=.o)
 all: $(OFILES)
 	$(CC) $^ -o basm
 
+-include $(DFILES)
 %.o: %.c
 	$(CC) -c $(CFLAGS) $< -o $@
