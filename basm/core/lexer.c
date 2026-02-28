@@ -1,8 +1,7 @@
 #include "basm/lexer.h"
 #include "basm/readbuf.h"
+#include "basm/trace.h"
 #include <errno.h>
-
-#include <stdio.h>
 
 /*
  * Returns true if the given character is a
@@ -86,6 +85,7 @@ lexer_consume(struct basm_state *state, struct token *res)
         res->c = c;
         return 0;
     default:
+        trace_error(state, "unexpected token '%c'\n", c);
         break;
     }
 
