@@ -1,6 +1,7 @@
 `include "inst.svh"
 `include "regs.svh"
 `include "alu.svh"
+`include "puc.svh"
 
 //
 // On-core control unit
@@ -11,6 +12,7 @@
 // @inst_i:         Fetch unit instruction input
 // @reg_value_i:    Input register value input
 // @alu_op_res_i:   ALU operation result input
+// @puc_i:          Power-up contract input
 // @pc_o:           Program counter output to fetch unit
 // @reg_write_en_o: If high, target register is written to
 // @reg_value_o:    Value to write to register
@@ -21,7 +23,8 @@
 // @reset_o:        RESET line output
 //
 module ctl #(
-    parameter WORD_LEN = 64
+    parameter WORD_LEN = 64,
+    parameter N_PUC = 2
 ) (
     input wire clk_i,
     input wire reset_i,
@@ -29,6 +32,8 @@ module ctl #(
     input wire [31:0] inst_i,
     input wire [WORD_LEN-1:0] reg_value_i,
     input wire [WORD_LEN-1:0] alu_op_res_i,
+    /* verilator lint_off UNUSEDSIGNAL */
+    input wire [N_PUC-1:0] puc_i,
 
     output logic [31:0] pc_o,
     output logic reg_write_en_o,
@@ -92,7 +97,19 @@ module ctl #(
                         need_decode <= 0;
                     end
                 end
-                default: reset_o <= 1;
+                default: begin
+                    // Allow the reset to propagate
+                    pc_inhibit <= 1;
+
+                    //
+                    // As of early revisions: when encountering an undefined
+                    // opcode, assert reset if the power up contract says so
+                    // for unhandled exceptions, otherwise halt.
+                    //
+                    if (!puc_i[PUC_EOH]) begin
+                        reset_o <= 1;
+                    end
+                end
             endcase
         end
     end

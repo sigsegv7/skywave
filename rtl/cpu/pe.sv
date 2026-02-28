@@ -7,17 +7,20 @@
 // @clk_i:      Clock input
 // @reset_i:    Reset input
 // @bus_data_i: Bus data input
+// @puc_i:      Power-up contract input
 // @bus_ad_o:   Bus address output
 // @reset_o:    RESET line output
 //
 module pe #(
     parameter AD_LEN = 32,
     parameter BUS_WIDTH = 32,
-    parameter WORD_LEN = 64
+    parameter WORD_LEN = 64,
+    parameter N_PUC = 2
 ) (
     input wire clk_i,
     input wire reset_i,
     input wire [BUS_WIDTH-1:0] bus_data_i,
+    input wire [N_PUC-1:0] puc_i,
 
     output logic [AD_LEN-1:0] bus_ad_o,
     output logic reset_o
@@ -34,13 +37,14 @@ module pe #(
     logic [WORD_LEN-1:0] alu_op_res_pool;
     alu_op_t alu_opc_feed;
 
-    ctl #(.WORD_LEN(WORD_LEN)) ctl_unit (
+    ctl #(.WORD_LEN(WORD_LEN), .N_PUC(N_PUC)) ctl_unit (
         .clk_i(clk_i),
         .reset_i(reset_i),
         .inst_i(inst_feed),
         .inst_valid_i(inst_valid_feed),
         .reg_value_i(reg_value_pool),
         .alu_op_res_i(alu_op_res_pool),
+        .puc_i(puc_i),
         .pc_o(pc_feed),
         .reg_write_en_o(reg_write_en_feed),
         .reg_value_o(reg_value_feed),

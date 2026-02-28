@@ -23,7 +23,6 @@ module skywave #(
     logic [BUS_WIDTH-1:0] bus_data_pool;
     logic g_reset;
     logic pe0_reset;
-    /* verilator lint_off UNUSEDSIGNAL */
     logic [N_PUC-1:0] puc;
 
     // Global reset mux
@@ -78,10 +77,12 @@ module skywave #(
     );
 
     // Processor core 0
-    pe #(.AD_LEN(AD_LEN), .BUS_WIDTH(BUS_WIDTH)) core0 (
+    pe #(.AD_LEN(AD_LEN), .BUS_WIDTH(BUS_WIDTH), .N_PUC(N_PUC))
+    core0 (
         .clk_i(clk),
         .reset_i(reset),
         .bus_data_i(bus_data_pool),
+        .puc_i(puc),
         .bus_ad_o(bus_ad_feed),
         .reset_o(pe0_reset)
     );
