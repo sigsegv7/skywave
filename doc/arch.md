@@ -97,9 +97,6 @@ PIN         MNEMONIC   PURPOSE
 -----------------------------------------------------
 CAP[0]      EOH#       Exception overflow halt enable
 CAP[1]      ITAP#      Indicator tap enable
-CAP[2]      RSVD       RESERVED
-CAP[3]      RSVD       RESERVED
-CAP[4]      RSVD       RESERVED
 -----------------------------------------------------
 
 MNEMONIC   BEHAVIOR
