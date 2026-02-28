@@ -236,5 +236,7 @@ MOV        0x02      Move IMM to reg      [B]
 RSVD       0x03      Reserved             [N/A]
 ADD        0x04      Add IMM to reg       [B]
 SUB        0x05      Sub IMM from reg     [B]
+AND        0x06      AND IMM to reg       [B]
+OR         0x07      OR IMM to reg        [B]
 -------------------------------------------------------
 ```

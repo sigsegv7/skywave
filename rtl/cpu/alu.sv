@@ -21,6 +21,8 @@ module alu #(
         case (opc_i)
             ALU_OP_ADD: op_res_o = (op_a_i + op_b_i);
             ALU_OP_SUB: op_res_o = (op_a_i - op_b_i);
+            ALU_OP_AND: op_res_o = (op_a_i & op_b_i);
+            ALU_OP_OR:  op_res_o = (op_a_i | op_b_i);
             default:    op_res_o = 0;
         endcase
     end
