@@ -17,6 +17,11 @@ Bootstrap PE)
 PC inhibit line)
     Describes an electrical connection to a processing element that results in
     the program counter being held if set.
+
+Uncore)
+    The uncore is the region around the processing elements that is unrelated to
+    instruction execution and used for implementing off-core components (i.e., bus fabric,
+    OPI, etc).
 ```
 
 ## Processor registers
@@ -46,6 +51,68 @@ FP : 0x12 : 64-bits  Frame pointer
 ---------------------------------------
 ```
 
+## SoC uncore
+
+The uncore region within the SoC is to contain off-core components unrelated to
+instruction execution, this section describes the components within.
+
+#### Bus control unit
+
+The bus control unit is responsible for routing read/write operations to external or on-chip peripherals
+(e.g., DDR, device registers, etc) using memory-mapped I/O (MMIO).
+
+#### Uncore ROM
+
+The uncore contains internal ROM used to store stage 1 platform firmware. This ROM is to be
+as small as possible while remaining adequate for stage 1 firmware to perform early platform
+initialization before jumping to a stage 2 trampoline.
+
+#### Operator panel interface (OPI)
+
+The operator panel interface is an uncore component responsible for managing I/O between an
+external operator-panel and on-chip functionality.
+
+#### Indicator taps (ITAP)
+
+The OPI contains an indicator tap unit responsible for managing the connections between on-chip
+functionality and external indicators such as LEDs or monitoring hardware.
+
+#### Power-up contract unit (PUC)
+
+The OPI contains a power-up contract unit responsible for sampling external capability pins and
+latching them upon reset. Externally, a single element within the PUC is known as a "capability pin"
+and is typically interfaced with by using physical jumpers. Internally, these signals are known as
+"power-up contracts". All power-up contracts are to be immutable upon reset until the next reset.
+
+## Capability pins
+
+The board containing the SoC chip is to have external pins dedicated to configuring
+SoC capabilities. These are referred to as capability pins. While they may alter on-chip
+behavior, they are not to affect the instruction set architecture in any way. The mapping
+of these pins are specific to the board and are listed in the board specific documentation
+(see the ``doc/board`` directory).
+
+```
+PIN         MNEMONIC   PURPOSE
+-----------------------------------------------------
+CAP[0]      EOH#       Exception overflow halt enable
+CAP[1]      ITAP#      Indicator tap enable
+CAP[2]      RSVD       RESERVED
+CAP[3]      RSVD       RESERVED
+CAP[4]      RSVD       RESERVED
+-----------------------------------------------------
+
+MNEMONIC   BEHAVIOR
+-------------------------------------------------------------
+EOH#   :   If asserted, unhandled exceptions result in all
+|          processing elements halting, otherwise reset.
+|
+ITAP#  :   If asserted, external indicators are to be driven
+|          by on-chip logic, otherwise logically isolated.
+|
+-------------------------------------------------------------
+```
+
 ## Machine reset state
 
 When the RESET# line is asserted, all general purpose and ABI registers are to be initialized to a value of
@@ -58,7 +125,7 @@ of zero.
 
 START        END       Description
 ----------------------------------------------
-0x000000   0x100000    Platform firmware ROM
+0x000000   0x002000    Platform firmware ROM
 ----------------------------------------------
 ```
 
